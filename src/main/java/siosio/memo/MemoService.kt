@@ -17,9 +17,14 @@ open class MemoService {
     return entity
   }
 
-  open fun findTop10(): List<MemoEntity> {
-    val query = em!!.createNamedQuery("memo_top10", javaClass<MemoEntity>())
+  open fun findAll(): List<MemoEntity> {
+    val query = em!!.createNamedQuery("memo_findAll", javaClass<MemoEntity>())
     query.setMaxResults(10)
     return query.getResultList()
+  }
+
+  open fun delete(memoId: Long) {
+    val entity = em!!.find(javaClass<MemoEntity>(), memoId)
+    em!!.remove(entity)
   }
 }

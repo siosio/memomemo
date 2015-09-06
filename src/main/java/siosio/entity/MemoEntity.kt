@@ -1,20 +1,21 @@
 package siosio.entity
 
+import java.sql.Timestamp
 import javax.persistence.*
 
 @Entity
 @Table(name = "memo")
 @NamedQuery(
-    name = "memo_top10",
-    query = "select m from MemoEntity m"
+    name = "memo_findAll",
+    query = "select m from MemoEntity m order by m.updatedTime desc"
 )
-public class MemoEntity() {
+public open class MemoEntity() {
 
   constructor(
       title: String,
-      detail: String) : this() {
+      description: String) : this() {
     this.title = title
-    this.detail = detail
+    this.description = description
   }
 
   var memoId: Long? = null
@@ -23,6 +24,18 @@ public class MemoEntity() {
   var title: String? = null
     @Column(nullable = false, length = 100) get
 
-  var detail: String? = null
-    @Column(nullable = false, length = 1000) get
+  var description: String? = null
+    @Column(nullable = false, length = 200) get
+
+  var updatedTime:Timestamp? = null
+    @Column(nullable = false) get
+
+  var pages:MutableList<PageEntity>? = null
+    @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.REMOVE, CascadeType.ALL)) get
+
+  @PrePersist
+  @PreUpdate
+  open fun pre():Unit {
+    this.updatedTime = Timestamp(System.currentTimeMillis())
+  }
 }
