@@ -2,10 +2,10 @@ var memo_app = angular.module('memo', []);
 
 memo_app
   .controller('MemoController', ['$scope', '$http', function($scope, $http) {
-    $scope.list = list;
+    $scope.list = list($scope, $http);
   }])
   .controller('ListController', ['$scope', '$http', function ($scope, $http) {
-    $scope.init = list;
+    $scope.init = list($scope, $http);
   }])
   .controller('AddMemoController', ['$scope', '$http', function ($scope, $http) {
     $scope.create = function() {
@@ -23,12 +23,14 @@ memo_app
     };
   }]);
 
-var list = function() {
-  $http({
-    method: 'get',
-    url: 'app/memo'
-  }).success(function(data, status, headers, config) {
-    console.log(data);
-    $scope.memoList = data;
-  });
+var list = function($scope, $http) {
+  return function() {
+    $http({
+      method: 'get',
+      url: 'app/memo'
+    }).success(function(data, status, headers, config) {
+      console.log(data);
+      $scope.memoList = data;
+    });
+  };
 };
