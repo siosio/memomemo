@@ -1,0 +1,40 @@
+group 'siosio'
+version '1.0-SNAPSHOT'
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.6'
+}
+
+apply plugin: 'war'
+apply plugin: 'kotlin'
+
+war.archiveName = 'memomemo'
+sourceCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  providedCompile 'javax:javaee-api:7.0'
+
+  // kotlin
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+  // angular
+  runtime 'org.webjars:angularjs:1.4.4'
+}
+
+buildscript {
+  ext.kotlin_version = '0.12.1230'
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+sourceSets {
+  main.java.srcDirs += 'src/main/kotlin'
+}

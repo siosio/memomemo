@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>( ..)φメモメモ</title>
+  <link rel="stylesheet" href="css/material.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="webjars/angularjs/1.4.4/angular.min.js"></script>
+  <script src="js/controller.js"></script>
+</head>
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+    <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+    </div>
+    <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+      <h3>( ..)φメモメモ</h3>
+    </div>
+    <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+    </div>
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark" ng-controller="MemoController">
+      <a href="#index" class="mdl-layout__tab is-active" ng-click="list()">トップ</a>
+      <a href="#add-memo" class="mdl-layout__tab">メモ追加</a>
+      <a href="#features" class="mdl-layout__tab">Features</a>
+      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
+        <i class="material-icons" role="presentation">add</i>
+        <span class="visuallyhidden">Add</span>
+      </button>
+    </div>
+  </header>
+  <main class="mdl-layout__content">
+    <div class="mdl-layout__tab-panel is-active" id="index" ng-controller="ListController" ng-init="init()">
+      <section class="section--center mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-grid" ng-repeat="memo in memoList">
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="mdl-layout__tab-panel" id="add-memo" ng-controller="AddMemoController">
+      <section class="section--center mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell mdl-cell--12-col">
+          <form>
+
+            <div class="mdl-grid">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--5-col">
+                <input class="mdl-textfield__input" type="text" id="title" ng-model="title" ng-required="true" />
+                <label class="mdl-textfield__label" for="title">タイトル</label>
+              </div>
+            </div>
+
+            <div class="mdl-grid">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--5-col">
+                <textarea class="mdl-textfield__input" id="detail" ng-model="detail" rows="4" ng-required="true"></textarea>
+                <label class="mdl-textfield__label" for="detail">詳細</label>
+              </div>
+            </div>
+
+            <div class="mdl-grid">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="create()">
+                追加
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<a href="https://github.com/google/material-design-lite/blob/master/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View Source</a>
+<script src="js/material.min.js"></script>
+</body>
+</html>
