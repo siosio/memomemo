@@ -5,11 +5,13 @@
   <title>( ..)φメモメモ</title>
   <link rel="stylesheet" href="css/material.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/memo.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <script src="webjars/jquery/2.1.4/jquery.min.js"></script>
   <script src="webjars/angularjs/1.4.4/angular.min.js"></script>
   <script src="js/controller.js"></script>
 </head>
-<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo">
+<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo" ng-controller="MemoController">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
     <div class="mdl-layout--large-screen-only mdl-layout__header-row">
@@ -19,50 +21,65 @@
     </div>
     <div class="mdl-layout--large-screen-only mdl-layout__header-row">
     </div>
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark" ng-controller="MemoController">
-      <a href="#index" class="mdl-layout__tab is-active" ng-click="list()">トップ</a>
-      <a href="#add-memo" class="mdl-layout__tab">メモ追加</a>
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+      <a href="#index" class="mdl-layout__tab is-active" id='index-link' ng-click="list()">トップ</a>
+      <a href="#add-memo" class="mdl-layout__tab" ng-click="addPage()">φ(..)メモメモ追加</a>
     </div>
   </header>
   <main class="mdl-layout__content">
-    <div class="mdl-layout__tab-panel is-active" id="index" ng-controller="ListController" ng-init="init()">
+    <div class="mdl-layout__tab-panel is-active" id="index" ng-init="list()">
       <section class="section--center mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
           <div class="mdl-grid" ng-repeat="memo in memoList">
-            <div class="demo-card-event mdl-cell--9-col mdl-card mdl-shadow--2dp">
+            <div class="memo-card-event mdl-card mdl-shadow--2dp">
               <div class="mdl-card__title mdl-card--expand">
                 <h4>{{memo.title}}</h4>
+              </div>
+              <div class="mdl-card__supporting-text">
+<pre>
+{{memo.detail}}
+</pre>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+                <div class="mdl-layout-spacer"></div>
+                <a href="" ng-click="edit()"><i class="material-icons">edit</i></a>
               </div>
             </div>
           </div>
         </div>
       </section>
     </div>
-    <div class="mdl-layout__tab-panel" id="add-memo" ng-controller="AddMemoController">
+    <div class="mdl-layout__tab-panel" id="add-memo">
       <section class="section--center mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
-          <form>
-
+          <form name="addMemo">
             <div class="mdl-grid">
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--5-col">
-                <input class="mdl-textfield__input" type="text" id="title" ng-model="title" ng-required="true" />
+              <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--6-col mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="title" ng-model="memo.title" ng-required="true" />
                 <label class="mdl-textfield__label" for="title">タイトル</label>
               </div>
             </div>
 
             <div class="mdl-grid">
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label mdl-cell mdl-cell--5-col">
-                <textarea class="mdl-textfield__input" id="detail" ng-model="detail" rows="4" ng-required="true"></textarea>
+              <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--6-col mdl-textfield--floating-label">
+                <textarea class="mdl-textfield__input" id="detail" ng-model="memo.detail" rows="4" ng-required="true"></textarea>
                 <label class="mdl-textfield__label" for="detail">詳細</label>
               </div>
             </div>
 
             <div class="mdl-grid">
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-click="create()">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" ng-disabled="addMemo.$invalid" ng-click="create()">
                 追加
               </button>
             </div>
           </form>
+        </div>
+      </section>
+    </div>
+
+    <div class="mdl-layout__tab-panel" id="edit">
+      <section class="section--center mdl-grid mdl-grid--no-spacing">
+        <div class="mdl-cell mdl-cell--12-col">
         </div>
       </section>
     </div>

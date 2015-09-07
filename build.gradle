@@ -24,6 +24,7 @@ dependencies {
 
   // angular
   runtime 'org.webjars:angularjs:1.4.4'
+  runtime 'org.webjars:jquery:2.1.4'
 }
 
 buildscript {
