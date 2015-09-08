@@ -6,16 +6,16 @@ import javax.persistence.*
 @Entity
 @Table(name = "memo")
 @NamedQuery(
-    name = "memo_top10",
+    name = "memo_findAll",
     query = "select m from MemoEntity m order by m.updatedTime desc"
 )
 public open class MemoEntity() {
 
   constructor(
       title: String,
-      detail: String) : this() {
+      description: String) : this() {
     this.title = title
-    this.detail = detail
+    this.description = description
   }
 
   var memoId: Long? = null
@@ -24,11 +24,14 @@ public open class MemoEntity() {
   var title: String? = null
     @Column(nullable = false, length = 100) get
 
-  var detail: String? = null
+  var description: String? = null
     @Column(nullable = false, length = 200) get
 
   var updatedTime:Timestamp? = null
     @Column(nullable = false) get
+
+  var pages:List<PageEntity>? = null
+    @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL)) get
 
   @PrePersist
   @PreUpdate

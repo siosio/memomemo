@@ -17,13 +17,20 @@ open public class MemoResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   open fun list(): List<MemoEntity> {
-    return service!!.findTop10()
+    return service!!.findAll()
   }
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   open fun create(memoForm: MemoForm): Response {
-    service!!.save(MemoEntity(memoForm.title, memoForm.detail))
+    service!!.save(MemoEntity(memoForm.title, memoForm.description))
     return Response.status(Response.Status.CREATED).build()
+  }
+
+  @DELETE
+  @Path("/{memoId}")
+  open fun delete(@PathParam("memoId") memoId: Long): Response {
+    service!!.delete(memoId)
+    return Response.accepted().build()
   }
 }

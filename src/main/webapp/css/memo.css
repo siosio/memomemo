@@ -1,7 +1,119 @@
+.memo .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
+    font-size: inherit;
+}
+
+.memo .mdl-layout__tab-bar-button {
+    display: none;
+}
+
+.memo .mdl-layout__tab-bar-button {
+    display: none;
+}
+
+.memo .mdl-layout.is-small-screen .mdl-layout__tab-bar .mdl-button {
+    display: none;
+}
+
+.memo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar,
+.memo .mdl-layout:not(.is-small-screen) .mdl-layout__tab-bar-container {
+    overflow: visible;
+}
+
+.memo .mdl-layout__tab-bar-container {
+    height: 64px;
+}
+
+.memo .mdl-layout__tab-bar {
+    padding: 0;
+    padding-left: 16px;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+}
+
+.memo .mdl-layout__tab-bar .mdl-layout__tab {
+    height: 64px;
+    line-height: 64px;
+}
+
+.memo .mdl-layout__tab-bar .mdl-layout__tab.is-active::after {
+    background-color: white;
+    height: 4px;
+}
+
+.memo main > .mdl-layout__tab-panel {
+    padding: 8px;
+    padding-top: 48px;
+}
+
+.memo .mdl-layout__content section:not(:last-of-type) {
+    position: relative;
+    margin-bottom: 48px;
+}
+
+.memo section.section--center {
+    max-width: 860px;
+}
+
+.memo section > button {
+    position: absolute;
+    z-index: 99;
+    top: 8px;
+    right: 8px;
+}
+
+.memo section .section__circle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+.memo section .section__text {
+    flex-grow: 1;
+    flex-shrink: 0;
+    padding-top: 8px;
+}
+
+.memo section .section__text h5 {
+    font-size: inherit;
+    margin: 0;
+    margin-bottom: 0.5em;
+}
+
+.memo section .section__text a {
+    text-decoration: none;
+}
+
+.memo section .section__circle-container > .section__circle-container__circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+    margin: 8px 0;
+}
+
+.memo section.section--footer .section__circle--big {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    margin: 8px 32px;
+}
+
+.memo .is-small-screen section.section--footer .section__circle--big {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    margin: 8px 16px;
+}
+
+/****************************************
+card
+****************************************/
 .memo-card-event.mdl-card {
-    width: 356px;
-    height: 256px;
+    height: auto;
     background: #3E4EB8;
+    width: 100%;
 }
 .memo-card-event > .mdl-card__actions {
     border-color: rgba(255, 255, 255, 0.2);
@@ -10,7 +122,6 @@
     align-items: flex-start;
     margin-bottom: 1px;
     padding-bottom: 1px;
-    height: calc(1em * 2);
 }
 .memo-card-event > .mdl-card__title > h4 {
     margin-top: 0;
@@ -18,18 +129,22 @@
 
 .memo-card-event > .mdl-card__supporting-text {
     margin-top: 1px !important;
+    padding-top: 5px;
     height: auto;
-    overflow: visible;
+    word-wrap: break-word;
 }
 
 .memo-card-event > .mdl-card__actions {
     display: flex;
     box-sizing:border-box;
     align-items: center;
+    margin: 1px;
+    margin-top: 15px;
 }
 .memo-card-event > .mdl-card__title,
 .memo-card-event > .mdl-card__supporting-text,
 .memo-card-event > .mdl-card__actions,
+.memo-card-event > .mdl-card__actions > a,
 .memo-card-event > .mdl-card__actions > .mdl-button {
     color: #fff !important;
 }

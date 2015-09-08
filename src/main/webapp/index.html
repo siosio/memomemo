@@ -4,14 +4,13 @@
   <meta charset="UTF-8">
   <title>( ..)φメモメモ</title>
   <link rel="stylesheet" href="css/material.min.css">
-  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/memo.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="webjars/jquery/2.1.4/jquery.min.js"></script>
   <script src="webjars/angularjs/1.4.4/angular.min.js"></script>
   <script src="js/controller.js"></script>
 </head>
-<body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo" ng-controller="MemoController">
+<body class="memo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo" ng-controller="MemoController">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
     <div class="mdl-layout--large-screen-only mdl-layout__header-row">
@@ -19,9 +18,7 @@
     <div class="mdl-layout--large-screen-only mdl-layout__header-row">
       <h3>( ..)φメモメモ</h3>
     </div>
-    <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-    </div>
-    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark" id="menue">
       <a href="#index" class="mdl-layout__tab is-active" id='index-link' ng-click="list()">トップ</a>
       <a href="#add-memo" class="mdl-layout__tab" ng-click="addPage()">φ(..)メモメモ追加</a>
     </div>
@@ -30,21 +27,24 @@
     <div class="mdl-layout__tab-panel is-active" id="index" ng-init="list()">
       <section class="section--center mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
-          <div class="mdl-grid" ng-repeat="memo in memoList">
-            <div class="memo-card-event mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title mdl-card--expand">
+          <div ng-repeat="memo in memoList" class="mdl-cell--5-col" style="display: inline-block; margin-right: 2em;">
+            <div class="memo-card-event mdl-card mdl-shadow--2dp mdl-cell--6-col">
+              <div class="mdl-card__title">
                 <h4>{{memo.title}}</h4>
               </div>
               <div class="mdl-card__supporting-text">
 <pre>
-{{memo.detail}}
+{{memo.description}}
 </pre>
               </div>
               <div class="mdl-card__actions mdl-card--border">
                 <div class="mdl-layout-spacer"></div>
-                <a href="" ng-click="edit()"><i class="material-icons">edit</i></a>
+                <a href="" ng-click="delete(memo.memoId)"><i class="material-icons">delete</i></a>
+                <span class="mdl-cell--1-col"></span>
+                <a href="" ng-click="edit(memo.memoId)"><i class="material-icons">edit</i></a>
               </div>
             </div>
+            <div class="mdl-layout-spacer"></div>
           </div>
         </div>
       </section>
@@ -56,14 +56,14 @@
             <div class="mdl-grid">
               <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--6-col mdl-textfield--floating-label">
                 <input class="mdl-textfield__input" type="text" id="title" ng-model="memo.title" ng-required="true" />
-                <label class="mdl-textfield__label" for="title">タイトル</label>
+                <label class="mdl-textfield__label" for="title">Title</label>
               </div>
             </div>
 
             <div class="mdl-grid">
               <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--6-col mdl-textfield--floating-label">
-                <textarea class="mdl-textfield__input" id="detail" ng-model="memo.detail" rows="4" ng-required="true"></textarea>
-                <label class="mdl-textfield__label" for="detail">詳細</label>
+                <textarea class="mdl-textfield__input" id="description" ng-model="memo.description" rows="4" ng-required="true"></textarea>
+                <label class="mdl-textfield__label" for="description">Description</label>
               </div>
             </div>
 
@@ -76,10 +76,24 @@
         </div>
       </section>
     </div>
-
     <div class="mdl-layout__tab-panel" id="edit">
       <section class="section--center mdl-grid mdl-grid--no-spacing">
         <div class="mdl-cell mdl-cell--12-col">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <thead>
+            <tr>
+              <th>title</th>
+              <th>edit</th>
+              <th>
+                <button class="mdl-button mdl-js-button mdl-button--icon">
+                  <i class="material-icons">add</i>
+                </button>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </section>
     </div>

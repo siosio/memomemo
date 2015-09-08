@@ -4,11 +4,13 @@ memo_app
   .controller('MemoController', ['$scope', '$http', function($scope, $http) {
     $scope.list = list($scope, $http);
 
+    var $e = angular.element;
+
     $scope.addPage = function() {
       $scope.memo = {};
       console.log('hogefuga');
-      angular.element('#detail').parent().addClass('is-invalid');
-      angular.element('#title').parent().addClass('is-invalid');
+      $e('#description').parent().addClass('is-invalid');
+      $e('#title').parent().addClass('is-invalid');
     };
 
     $scope.create = function() {
@@ -19,16 +21,27 @@ memo_app
         contentType: 'application/json'
       }).success(function(data, status, headers, config) {
         $scope.memo = {};
-        angular.element('header a.is-active').removeClass('is-active');
-        angular.element('#index-link').addClass('is-active');
-        angular.element('main > div.is-active').removeClass('is-active');
-        angular.element('#index').addClass('is-active');
+        $e('header a.is-active').removeClass('is-active');
+        $e('#index-link').addClass('is-active');
+        $e('main > div.is-active').removeClass('is-active');
+        $e('#index').addClass('is-active');
         $scope.list();
       });
     };
 
-    $scope.edit = function() {
-      alert('edit');
+    $scope.delete = function(memoId) {
+      console.log(memoId);
+      $http({
+        method: 'delete',
+        url: 'app/memo/' + memoId
+      }).success(function(data, status, headers, config) {
+        $scope.list();
+      });
+    };
+
+    $scope.edit = function(memoId) {
+      $e('main > div.is-active').removeClass('is-active');
+      $e('#edit').addClass('is-active');
     }
   }]);
 
