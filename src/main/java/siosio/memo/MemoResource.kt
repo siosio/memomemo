@@ -16,8 +16,11 @@ open public class MemoResource {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  open fun list(): List<MemoEntity> {
-    return service!!.findAll()
+  open fun list(): List<MemoForm> {
+    val list = service!!.findAll()
+    return list.mapNotNull {
+      MemoForm(it.memoId!!, it.title!!, it.description!!)
+    }
   }
 
   @POST

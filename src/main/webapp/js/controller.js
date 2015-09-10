@@ -1,58 +1,101 @@
 var memo_app = angular.module('memo', []);
 
 memo_app
-  .controller('MemoController', ['$scope', '$http', function($scope, $http) {
-    $scope.list = list($scope, $http);
+  .controller('MemoController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+    
+    var $title = $('#title');
+    var $description = $('#description');
 
-    var $e = angular.element;
-
-    $scope.addPage = function() {
-      $scope.memo = {};
-      console.log('hogefuga');
-      $e('#description').parent().addClass('is-invalid');
-      $e('#title').parent().addClass('is-invalid');
+    // find memo list
+    $scope.list = function () {
+      $('.is-active').removeClass('is-active');
+      $('#index').addClass('is-active');
+      $location.url('');
+      $http({
+        method: 'get', url: 'app/memo'
+      }).success(function (data, status, headers, config) {
+        $scope.memos = data;
+      });
     };
 
-    $scope.create = function() {
+    // create memo
+    $scope.create = function () {
+      $http({
+        method: 'post', url: 'app/memo', data: JSON.stringify($scope.memo), contentType: 'application/json'
+      }).success(function (data, status, headers, config) {
+        $scope.memo = {};
+        $scope.list();
+        $title.parent().addClass('is-invalid');
+        $description.parent().addClass('is-invalid');
+      });
+    };
+
+    // delete memo
+    $scope.delete = function (memoId) {
+      $http({
+        method: 'delete', url: 'app/memo/' + memoId
+      }).success(function (data, status, headers, config) {
+        $scope.list();
+      });
+    };
+
+    // find all page
+    $scope.listPage = function (memoId) {
+      $('.is-active').removeClass('is-active');
+      $('#page-list').addClass('is-active');
+      $scope.memoId = memoId;
+      $location.url('list');
+      $scope.findAllPage(memoId);
+    };
+
+    $scope.findAllPage = function (memoId) {
+      $http({
+        method: 'get', url: 'app/page/list/' + memoId
+      }).success(function (data, status, headers, config) {
+        $scope.pages = data;
+      });
+    };
+
+    $scope.newPage = function () {
+      var dialog = document.getElementById('page');
+      $scope.page = {};
+      dialog.showModal();
+    };
+
+    $scope.closeDialog = function (id) {
+      var dialog = document.getElementById(id);
+      dialog.close();
+      $scope.memoId = null;
+    };
+
+    $scope.createPage = function () {
+      var dialog = document.getElementById('page');
+      $scope.page.memoId = $scope.memoId;
       $http({
         method: 'post',
-        url: 'app/memo',
-        data: JSON.stringify($scope.memo),
+        url: 'app/page',
+        data: JSON.stringify($scope.page),
         contentType: 'application/json'
-      }).success(function(data, status, headers, config) {
-        $scope.memo = {};
-        $e('header a.is-active').removeClass('is-active');
-        $e('#index-link').addClass('is-active');
-        $e('main > div.is-active').removeClass('is-active');
-        $e('#index').addClass('is-active');
-        $scope.list();
+      }).success(function (data, status, headers, config) {
+        $scope.listPage($scope.page.memoId)
       });
+      dialog.close();
     };
 
-    $scope.delete = function(memoId) {
-      console.log(memoId);
-      $http({
-        method: 'delete',
-        url: 'app/memo/' + memoId
-      }).success(function(data, status, headers, config) {
-        $scope.list();
-      });
-    };
-
-    $scope.edit = function(memoId) {
-      $e('main > div.is-active').removeClass('is-active');
-      $e('#edit').addClass('is-active');
+    $scope.showPage = function (page) {
+      var dialog = document.getElementById("show_page");
+      var html = marked(page.text);
+      console.log(page);
+      $('#show_page_text').html(html);
+      dialog.showModal();
     }
   }]);
 
 
-var list = function($scope, $http) {
-  return function() {
-    $http({
-      method: 'get',
-      url: 'app/memo'
-    }).success(function(data, status, headers, config) {
-      $scope.memoList = data;
-    });
-  };
-};
+$(function () {
+  $('#page_text').keyup(function () {
+    var src = $(this).val();
+    var html = marked(src);
+    $('#preview').html(html);
+  });
+});

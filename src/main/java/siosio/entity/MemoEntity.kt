@@ -30,8 +30,8 @@ public open class MemoEntity() {
   var updatedTime:Timestamp? = null
     @Column(nullable = false) get
 
-  var pages:List<PageEntity>? = null
-    @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.ALL)) get
+  var pages:MutableList<PageEntity>? = null
+    @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.REMOVE, CascadeType.ALL)) get
 
   @PrePersist
   @PreUpdate
