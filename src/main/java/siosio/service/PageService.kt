@@ -1,4 +1,4 @@
-package siosio.page
+package siosio.service
 
 import siosio.entity.MemoEntity
 import siosio.entity.PageEntity
@@ -12,23 +12,22 @@ import javax.transaction.Transactional
 open  class PageService {
 
   @PersistenceContext
-  open var em: EntityManager? = null
+  lateinit open private val em: EntityManager
 
-  open fun findMemo(memoId:Long):MemoEntity = em!!.find(javaClass<MemoEntity>(), memoId)
+  open fun findMemo(memoId:Long): MemoEntity = em.find(MemoEntity::class.java, memoId)
 
   open fun save(memoId:Long, entity: PageEntity) {
-    val memoEntity = em!!.find(javaClass<MemoEntity>(), memoId)
+    val memoEntity = em.find(MemoEntity::class.java, memoId)
     entity.memo = memoEntity
-    memoEntity.pages!!.add(entity)
+    memoEntity.pages.add(entity)
   }
 
   open fun list(memoId: Long): List<PageEntity> {
     val memo = findMemo(memoId)
-    val query = em!!.createNamedQuery("page_findAll", javaClass<PageEntity>())
+    val query = em.createNamedQuery("page_findAll", PageEntity::class.java)
     query.setParameter("memo", memo)
 
-    val pages = query.getResultList()
-    println(pages)
+    val pages = query.resultList
     return pages
   }
 }

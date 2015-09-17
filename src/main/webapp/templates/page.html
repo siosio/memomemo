@@ -1,0 +1,31 @@
+<div id="page-list">
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col">
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+        <tr>
+          <th>title</th>
+          <th>edit</th>
+          <th>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="app.new()">
+              <i class="material-icons">add</i>
+            </button>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="page in app.pages">
+          <td>{{page.title}}</td>
+          <td colspan="2">
+            <a href="" ng-click="showPage(page)">
+              <i class="material-icons">description</i>
+            </a>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="mdl-cell mdl-cell--12-col">
+  <div class="mdl-grid">
+    <div class="memo-card-container mdl-cell mdl-cell--6-col">
+      <div class="memo-card mdl-card mdl-shadow--2dp">
+        <form name="memoForm">
+          <div class="mdl-card__title">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="title" ng-model="app.memo.title" ng-required="true" />
+              <label class="mdl-textfield__label" for="title">Title</label>
+            </div>
+          </div>
+          <div class="mdl-card__supporting-text mdl-card--expand">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <textarea class="mdl-textfield__input" id="description" ng-model="app.memo.description" rows="1" ng-required="true"></textarea>
+              <label class="mdl-textfield__label" for="description">Description</label>
+            </div>
+          </div>
+          <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-layout-spacer"></div>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="app.create()" ng-disabled="memoForm.$invalid">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div ng-repeat="memo in app.memos" class="memo-card-container mdl-cell mdl-cell--6-col">
+      <div class="memo-show-card mdl-card mdl-shadow--2dp" id="memo_{{memo.memoId}}">
+        <div class="mdl-card__title">
+          <h4>{{memo.title}}</h4>
+        </div>
+        <div class="mdl-card__supporting-text mdl-card--expand">
+          {{memo.description}}
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+          <div class="mdl-layout-spacer"></div>
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="app.listPage(memo.memoId)">
+            <i class="material-icons">list</i>
+          </button>
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="app.delete(memo.memoId)">
+            <i class="material-icons">delete</i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>

@@ -1,101 +1,156 @@
-var memo_app = angular.module('memo', []);
+var memo_app = angular.module('memo', ['ngRoute', 'ngResource']);
 
 memo_app
-  .controller('MemoController', ['$scope', '$http', '$location', function($scope, $http, $location) {
-    
-    var $title = $('#title');
-    var $description = $('#description');
+    .config(function ($routeProvider) {
+      $routeProvider
+          .when('/', {
+            templateUrl : 'templates/top.html',
+            controller : 'MemoController',
+            controllerAs: 'app'
+          })
+          .when('/:memoId/page', {
+            templateUrl : 'templates/page.html',
+            controller : 'PageController',
+            controllerAs: 'app'
+          })
+          .when('/:memoId/page/new', {
+            templateUrl : 'templates/page_new.html',
+            controller : 'PageController',
+            controllerAs: 'app'
+          })
+          .otherwise({
+            redirectTo: '/'
+          })
+    })
+    .controller('MemoController', function ($scope, $http, $location) {
 
-    // find memo list
-    $scope.list = function () {
-      $('.is-active').removeClass('is-active');
-      $('#index').addClass('is-active');
-      $location.url('');
-      $http({
-        method: 'get', url: 'app/memo'
-      }).success(function (data, status, headers, config) {
-        $scope.memos = data;
-      });
-    };
+      var vm = this;
 
-    // create memo
-    $scope.create = function () {
-      $http({
-        method: 'post', url: 'app/memo', data: JSON.stringify($scope.memo), contentType: 'application/json'
-      }).success(function (data, status, headers, config) {
-        $scope.memo = {};
-        $scope.list();
-        $title.parent().addClass('is-invalid');
-        $description.parent().addClass('is-invalid');
-      });
-    };
+      // list memo
+      vm.list = function () {
+        $http({
+          method: 'get',
+          url   : 'app/memo'
+        }).success(function (data, status, headers, config) {
+          vm.memos = data;
+        });
+        componentHandler.upgradeAllRegistered();
+      };
 
-    // delete memo
-    $scope.delete = function (memoId) {
-      $http({
-        method: 'delete', url: 'app/memo/' + memoId
-      }).success(function (data, status, headers, config) {
-        $scope.list();
-      });
-    };
+      // create memo
+      vm.create = function () {
+        $http({
+          method     : 'post',
+          url   : 'app/memo',
+          data  : JSON.stringify(vm.memo),
+          contentType: 'application/json'
+        }).success(function (data, status, headers, config) {
+          vm.memo = {};
+          vm.list();
+        });
+      };
 
-    // find all page
-    $scope.listPage = function (memoId) {
-      $('.is-active').removeClass('is-active');
-      $('#page-list').addClass('is-active');
-      $scope.memoId = memoId;
-      $location.url('list');
-      $scope.findAllPage(memoId);
-    };
+      // delete memo
+      vm.delete = function (memoId) {
+        var remove = function () {
+          $http({
+            method: 'delete',
+            url   : 'app/memo/' + memoId
+          }).success(function (data, status, headers, config) {
+            vm.list();
+          });
+        };
+        var $remove = $('#memo_' + memoId);
+        $remove.addClass('remove');
+        $remove.get(0).addEventListener('transitionend', function () {
+          remove();
+        });
+      };
 
-    $scope.findAllPage = function (memoId) {
-      $http({
-        method: 'get', url: 'app/page/list/' + memoId
-      }).success(function (data, status, headers, config) {
-        $scope.pages = data;
-      });
-    };
+      vm.listPage = function (memoId) {
+        $location.path('/' + memoId + '/page')
+      };
 
-    $scope.newPage = function () {
-      var dialog = document.getElementById('page');
-      $scope.page = {};
-      dialog.showModal();
-    };
+      vm.list();
+    })
+    .controller('PageController', function ($scope, $http, $routeParams, $location) {
+      var vm = this;
 
-    $scope.closeDialog = function (id) {
-      var dialog = document.getElementById(id);
-      dialog.close();
-      $scope.memoId = null;
-    };
+      vm.list = function () {
+        $http({
+          method: 'get',
+          url   : 'app/page/list/' + memoId
+        }).success(function (data, status, headers, config) {
+          vm.pages = data;
+        });
+      };
 
-    $scope.createPage = function () {
-      var dialog = document.getElementById('page');
-      $scope.page.memoId = $scope.memoId;
-      $http({
-        method: 'post',
-        url: 'app/page',
-        data: JSON.stringify($scope.page),
-        contentType: 'application/json'
-      }).success(function (data, status, headers, config) {
-        $scope.listPage($scope.page.memoId)
-      });
-      dialog.close();
-    };
+      vm.new = function () {
+        $location.path('/' + vm.memoId + '/page/new');
+      };
 
-    $scope.showPage = function (page) {
-      var dialog = document.getElementById("show_page");
-      var html = marked(page.text);
-      console.log(page);
-      $('#show_page_text').html(html);
-      dialog.showModal();
-    }
-  }]);
+      vm.new_page = function () {
+        var $preview = $('#preview');
+        console.log($preview);
+        $('#page_text').keyup(function () {
+          var src = $(this).val();
+          var html = marked(src);
+          $preview.html(html);
+        });
+      };
 
+      vm.create = function () {
+        vm.page.memoId = vm.memoId;
+        $http({
+          method     : 'post',
+          url   : 'app/page',
+          data  : JSON.stringify(vm.page),
+          contentType: 'application/json'
+        }).success(function (data, status, headers, config) {
+          $location.path('/' + vm.memoId + '/page')
+        });
+        dialog.close();
+      };
 
-$(function () {
-  $('#page_text').keyup(function () {
-    var src = $(this).val();
-    var html = marked(src);
-    $('#preview').html(html);
-  });
-});
+      vm.memoId = $routeParams.memoId;
+      if (!$location.path().indexOf('/new')) {
+        vm.list();
+      } else {
+        vm.new_page();
+      }
+      componentHandler.upgradeAllRegistered();
+    });
+//memo_app
+//  .controller('MemoController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+//
+//    var $title = $('#title');
+//    var $description = $('#description');
+//
+//
+//
+//    // find all page
+//    $scope.listPage = function (memoId) {
+//      $('.is-active').removeClass('is-active');
+//      $('#page-list').addClass('is-active');
+//    };
+//
+//
+//
+//    $scope.closeDialog = function (id) {
+//      var dialog = document.getElementById(id);
+//      dialog.close();
+//      $scope.memoId = null;
+//    };
+//
+//
+//    $scope.showPage = function (page) {
+//      var dialog = document.getElementById("show_page");
+//      var html = marked(page.text);
+//      console.log(page);
+//      $('#show_page_text').html(html);
+//      dialog.showModal();
+//    }
+//  }]);
+//
+//
+
