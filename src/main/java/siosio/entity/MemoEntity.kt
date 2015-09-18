@@ -11,6 +11,10 @@ import javax.persistence.*
 )
 public open class MemoEntity() {
 
+  constructor(memoId: Long) : this() {
+    this.memoId = memoId
+  }
+
   constructor(
       title: String,
       description: String) : this() {
@@ -18,24 +22,24 @@ public open class MemoEntity() {
     this.description = description
   }
 
+  @Id @GeneratedValue @Column(name = "id")
   var memoId: Long? = null
-    @Id @GeneratedValue @Column(name = "id") get
 
-  var title: String? = null
-    @Column(nullable = false, length = 100) get
+  @Column(nullable = false, length = 100)
+  lateinit var title: String
 
-  var description: String? = null
-    @Column(nullable = false, length = 200) get
+  @Column(nullable = false, length = 200)
+  lateinit var description: String
 
-  var updatedTime:Timestamp? = null
-    @Column(nullable = false) get
+  @Column(nullable = false)
+  lateinit var updatedTime: Timestamp
 
-  var pages:MutableList<PageEntity>? = null
-    @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.REMOVE, CascadeType.ALL)) get
+  @OneToMany(fetch = FetchType.LAZY, cascade = arrayOf(CascadeType.REMOVE, CascadeType.ALL))
+  lateinit var pages: MutableList<PageEntity>
 
   @PrePersist
   @PreUpdate
-  open fun pre():Unit {
+  open fun pre(): Unit {
     this.updatedTime = Timestamp(System.currentTimeMillis())
   }
 }

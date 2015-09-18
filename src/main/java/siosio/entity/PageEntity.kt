@@ -4,10 +4,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "page")
-@NamedQuery(
-    name = "page_findAll",
-    query = "select p from PageEntity p where p.memo = :memo"
-)
 public open class PageEntity() {
 
   constructor(title:String, text:String):this() {

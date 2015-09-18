@@ -1,0 +1,33 @@
+<div>
+  <form name="pageForm">
+    <div class="mdl-grid" style="overflow: auto; max-height: 75%">
+      <div class="mdl-cell mdl-cell--6-col">
+        <div class="mdl-grid">
+          <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="page_title"  ng-model="app.page.title" ng-required="true" />
+            <label class="mdl-textfield__label" for="page_title">Title</label>
+          </div>
+        </div>
+        <div class="mdl-grid">
+          <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col mdl-textfield--floating-label" id="page_text_parent">
+            <textarea class="mdl-textfield__input" id="page_text" rows="10" ng-required="true" ng-model="app.page.text"></textarea>
+            <label class="mdl-textfield__label" for="page_text">Text</label>
+          </div>
+        </div>
+      </div>
+      <div class="mdl-cell mdl-cell--6-col">
+        <div id="preview" style="overflow: auto">
+        </div>
+      </div>
+    </div>
+    <div class="mdl-grid" style="max-height: 25%;">
+      <div class="mdl-cell mdl-cell--11-col"></div>
+      <div class="mdl-cell mdl-cell--1-col">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
+            ng-click="app.create()" ng-disabled="pageForm.$invalid">
+          <i class="material-icons">add</i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

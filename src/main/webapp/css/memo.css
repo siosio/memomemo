@@ -25,9 +25,6 @@ dialog {
 /****************************************
 list dialog
 ****************************************/
-#page-list table {
-  width: 100%;
-}
 
 #page, #show_page {
   width: 50%;
@@ -65,6 +62,14 @@ card
   display: table-cell;
   padding: 0 40px 0 40px;
   vertical-align: middle;
+}
+
+.memo-show-card.remove {
+  height: 0;
+  width: 0;
+  opacity: 0;
+  transition-duration: 2s;
+  transition-timing-function: ease-out;
 }
 
 .memo-card.mdl-card, .memo-show-card.mdl-card {

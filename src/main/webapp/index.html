@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="memo">
 <head>
   <meta charset="UTF-8">
   <title>( ..)φメモメモ</title>
@@ -8,152 +8,42 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="webjars/jquery/2.1.4/jquery.min.js"></script>
   <script src="webjars/angularjs/1.4.4/angular.min.js"></script>
+  <script src="webjars/angularjs/1.4.4/angular-resource.min.js"></script>
+  <script src="webjars/angularjs/1.4.4/angular-route.min.js"></script>
   <script src="js/controller.js"></script>
 </head>
-<body class="memo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base" ng-app="memo" ng-controller="MemoController">
+<body class="memo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
     <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-      <a id="top" href="" ng-click="list()">
+      <a id="top" href="#/">
         <h3>( ..)φメモメモ</h3>
       </a>
     </div>
   </header>
   <main class="mdl-layout__content">
-    <div class="mdl-layout__tab-panel is-active" id="index" ng-init="list()">
-      <section class="section--center mdl-grid mdl-grid--no-spacing">
-        <div class="mdl-cell mdl-cell--12-col">
-          <div class="mdl-grid">
-            <div class="memo-card-container mdl-cell mdl-cell--6-col">
-              <div class="memo-card mdl-card mdl-shadow--2dp">
-                <form name="memoForm">
-                  <div class="mdl-card__title">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                      <input class="mdl-textfield__input" type="text" id="title" ng-model="memo.title" ng-required="true" />
-                      <label class="mdl-textfield__label" for="title">Title</label>
-                    </div>
-                  </div>
-                  <div class="mdl-card__supporting-text mdl-card--expand">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                      <textarea class="mdl-textfield__input" id="description" ng-model="memo.description" rows="1" ng-required="true"></textarea>
-                      <label class="mdl-textfield__label" for="description">Description</label>
-                    </div>
-                  </div>
-                  <div class="mdl-card__actions mdl-card--border">
-                    <div class="mdl-layout-spacer"></div>
-                    <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="create()" ng-disabled="memoForm.$invalid">
-                      <i class="material-icons">add</i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div ng-repeat="memo in memos" class="memo-card-container mdl-cell mdl-cell--6-col">
-              <div class="memo-show-card mdl-card mdl-shadow--2dp">
-                <div class="mdl-card__title">
-                  <h4>{{memo.title}}</h4>
-                </div>
-                <div class="mdl-card__supporting-text mdl-card--expand">
-                  {{memo.description}}
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <div class="mdl-layout-spacer"></div>
-                  <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="listPage(memo.memoId)">
-                    <i class="material-icons">list</i>
-                  </button>
-                  <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="delete(memo.memoId)">
-                    <i class="material-icons">delete</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <section class="section--center mdl-grid mdl-grid--no-spacing">
+      <div ng-view="" class="mdl-cell mdl-cell--12-col">
     </div>
-
-    <div class="mdl-layout__tab-panel" id="page-list" ng-init="list()">
-      <div class="mdl-grid">
-        <div class="mdl-cell--3-col mdl-cell"></div>
-        <div class="mdl-cell mdl-cell--6-col">
-          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-            <thead>
-            <tr>
-              <th>title</th>
-              <th>edit</th>
-              <th>
-                <button class="mdl-button mdl-js-button mdl-button--icon" ng-click="newPage()">
-                  <i class="material-icons">add</i>
-                </button>
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="page in pages">
-              <td>{{page.title}}</td>
-              <td colspan="2">
-                <a href="" ng-click="showPage(page)">
-                  <i class="material-icons">description</i>
-                </a>
-              </td>
-              <td></td>
-              <td></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    </section>
   </main>
 </div>
 
-<dialog id="page">
-  <div class="mdl-grid" style="max-height: 25%;">
-    <div class="mdl-cell mdl-cell--10-col"></div>
-    <div class="mdl-cell mdl-cell--1-col">
-      <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="closeDialog('page')">
-        <i class="material-icons">close</i>
-      </button>
-    </div>
-    <div class="mdl-cell mdl-cell--1-col">
-      <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="createPage()">
-        <i class="material-icons">add</i>
-      </button>
-    </div>
-  </div>
-  <div class="mdl-grid" style="overflow: auto; max-height: 75%">
-    <div class="mdl-cell mdl-cell--6-col">
-      <div class="mdl-grid">
-        <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col mdl-textfield--floating-label">
-          <input class="mdl-textfield__input" type="text" id="page_title" ng-required="true" ng-model="page.title" />
-          <label class="mdl-textfield__label" for="page_title">Title</label>
-        </div>
-      </div>
-      <div class="mdl-grid">
-        <div class="mdl-textfield mdl-js-textfield mdl-cell mdl-cell--12-col mdl-textfield--floating-label" id="page_text_parent">
-          <textarea class="mdl-textfield__input" id="page_text" rows="10" ng-required="true" ng-model="page.text"></textarea>
-          <label class="mdl-textfield__label" for="page_text">Text</label>
-        </div>
-      </div>
-    </div>
-    <div class="mdl-cell mdl-cell--6-col">
-      <div id="preview" style="overflow: auto">
-      </div>
-    </div>
-  </div>
-</dialog>
-<dialog id="show_page">
-  <div class="mdl-grid">
-    <div class="mdl-cell mdl-cell--11-col"></div>
-    <div class="mdl-cell mdl-cell--1-col">
-      <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" ng-click="closeDialog('show_page')">
-        <i class="material-icons">close</i>
-      </button>
-    </div>
-  </div>
-  <div id="show_page_text">
-  </div>
-</dialog>
+
+<!--<dialog id="page">-->
+<!--</dialog>-->
+<!--<dialog id="show_page">-->
+<!--<div class="mdl-grid">-->
+<!--<div class="mdl-cell mdl-cell&#45;&#45;11-col"></div>-->
+<!--<div class="mdl-cell mdl-cell&#45;&#45;1-col">-->
+<!--<button class="mdl-button mdl-js-button mdl-button&#45;&#45;icon mdl-button&#45;&#45;colored" ng-click="closeDialog('show_page')">-->
+<!--<i class="material-icons">close</i>-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div id="show_page_text">-->
+<!--</div>-->
+<!--</dialog>-->
 <a href="https://github.com/google/material-design-lite/blob/master/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">View Source</a>
 <script src="js/material.min.js"></script>
 <script src="js/marked.min.js"></script>
