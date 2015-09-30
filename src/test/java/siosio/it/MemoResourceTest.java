@@ -1,6 +1,7 @@
 package siosio.it;
 
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.*;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.*;
@@ -16,7 +17,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.collection.IsArrayContainingInAnyOrder;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.hamcrest.collection.IsEmptyCollection;
@@ -87,5 +91,23 @@ public class MemoResourceTest {
         final List<MemoForm> list = resource.list();
         assertThat("2件取得できること", list, hasSize(2));
         assertThat(list.stream().map(MemoForm::getTitle).collect(toList()), containsInAnyOrder("title", "title2"));
+    }
+
+    @Test
+    public void create(@ArquillianResteasyResource MemoResource resource) throws Exception {
+        MemoForm form = new MemoForm();
+        form.setTitle("title");
+        form.setDescription("description");
+
+        Response response = resource.create(form);
+        assertThat("正常に終了していること", response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
+
+        Query query = em.createNativeQuery("select * from memo", MemoEntity.class);
+        List<MemoEntity> list = query.getResultList();
+        assertThat("1レコード登録できていること", list, hasSize(1));
+        MemoEntity result = list.get(0);
+        assertThat(result.getMemoId(), is(notNullValue()));
+        assertThat(result.getTitle(), is("title"));
+        assertThat(result.getDescription(), is("description"));
     }
 }
