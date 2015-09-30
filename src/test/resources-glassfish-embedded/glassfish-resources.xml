@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC
+    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+    "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+  <jdbc-resource pool-name="test-db"
+      jndi-name="jdbc/memo"/>
+  <jdbc-connection-pool name="test-db"
+      res-type="javax.sql.DataSource"
+      datasource-classname="org.h2.jdbcx.JdbcDataSource"
+      is-isolation-level-guaranteed="false">
+    <property name="user" value="sa" />
+    <property name="password" value="sa" />
+    <property name="URL" value="jdbc:h2:file:./db/test-db" />
+  </jdbc-connection-pool>
+</resources>
